@@ -1,6 +1,6 @@
 export default class User {
-    private name: string = "unknown";
-    private age: number = 20;
+    private name = "unknown";
+    private age = 20;
     constructor(name: string, age: number) {
         this.name = name;
         this.age = age;
