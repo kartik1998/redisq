@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 class User {
     constructor(name, age) {
-        this.name = "unknown";
+        this.name = 'unknown';
         this.age = 20;
         this.name = name;
         this.age = age;

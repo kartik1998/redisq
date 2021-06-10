@@ -1,14 +1,10 @@
-import prompt from 'prompt-sync';
-import User from './user/user';
+import redis from 'redis';
 
-const scan = prompt();
+const client = redis.createClient({ host: 'localhost', port: '6379' });
 
-let testCases = Number(scan());
+client.on('error', function (error) {
+  console.error(error);
+});
 
-while (testCases-- > 0) {
-  const A = scan()
-    .split(' ')
-    .map((num) => parseInt(num));
-  const user = new User('ken', A[0]);
-  console.log(user);
-}
+client.set('key', 'value', redis.print);
+client.get('key', redis.print);
