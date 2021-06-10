@@ -6,8 +6,8 @@
     "start": "node build/index.js",
     "compile": "tsc -p tsconfig.json",
     "build": "npm run compile && npm run start",
-	"lint": "eslint . --ext .ts",
-	"lint:fix": "eslint . --ext .ts --fix",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix",
     "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'test/**/*.ts'"
   },
   "author": "Kartik Rawat",
