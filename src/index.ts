@@ -1,10 +1,8 @@
-import redis from 'redis';
+import RedisQ from './redisq/redisq';
 
-const client = redis.createClient({ host: 'localhost', port: '6379' });
+const queue = new RedisQ();
 
-client.on('error', function (error) {
-  console.error(error);
+queue.set('kartik', '20');
+queue.get('kartik', (err, reply) => {
+  console.log(err, reply);
 });
-
-client.set('key', 'value', redis.print);
-client.get('key', redis.print);
