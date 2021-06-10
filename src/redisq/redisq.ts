@@ -11,7 +11,7 @@ export default class RedisQ {
     this.client.set(key, value);
   }
 
-  public get(key: string, callback: Function): void {
+  public get(key: string, callback: any): void {
     this.client.get(key, (err, reply) => {
       callback(err, reply);
     });
