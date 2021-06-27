@@ -13,11 +13,16 @@ export default class RedisQ {
         throw new Error('message must be of type string');
       });
     }
+
     this.client.publish(queueName, message, callback);
   }
 
   public consume(queueName: string, callback: any): void {
     this.client.subscribe(queueName);
     this.client.on('message', callback);
+  }
+
+  public drain(): void {
+    this.client.disconnect();
   }
 }
