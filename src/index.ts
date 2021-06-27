@@ -1,3 +1,3 @@
 import RedisQ from './redisq/redisq';
 
-const queue = new RedisQ();
+module.exports = RedisQ;
