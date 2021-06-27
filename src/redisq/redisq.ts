@@ -7,13 +7,17 @@ export default class RedisQ {
     this.client = redis.createClient(defaults);
   }
 
-  public set(key: string, value: string): void {
-    this.client.set(key, value);
+  public sendToQueue(queueName: string, message: string, callback: Function): void {
+    if (typeof message !== 'string') {
+      process.nextTick(() => {
+        throw new Error('message must be of type string');
+      });
+    }
+    this.client.publish(queueName, message, callback);
   }
 
-  public get(key: string, callback: any): void {
-    this.client.get(key, (err, reply) => {
-      callback(err, reply);
-    });
+  public consume(queueName: string, callback: Function): void {
+    this.client.subscribe(queueName);
+    this.client.on('message', callback);
   }
 }
