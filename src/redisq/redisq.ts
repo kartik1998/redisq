@@ -1,4 +1,5 @@
 import redis from 'redis';
+import { generateRandomString } from '../lib/utility';
 
 export default class RedisQ {
   private client: any;
@@ -16,7 +17,7 @@ export default class RedisQ {
 
     this.client.publish(queueName, message, (err, data) => {
       if (data === 0) {
-        this.client.hmset(queueName, queueName, message, (err1, res) => {
+        this.client.hmset(queueName, generateRandomString(), message, (err1, res) => {
           callback(err, err1, res, data);
         });
       }
@@ -26,7 +27,7 @@ export default class RedisQ {
   public consume(queueName: string, callback: any): void {
     this.client.hgetall(queueName, (err, res) => {
       this.client.subscribe(queueName);
-      callback(queueName, res);
+      Object.values(res).forEach(val => callback(queueName, val));
       this.client.on('message', callback);
     });
   }

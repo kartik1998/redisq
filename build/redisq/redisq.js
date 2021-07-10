@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const redis_1 = __importDefault(require("redis"));
+const utility_1 = require("../lib/utility");
 class RedisQ {
     constructor(defaults = undefined) {
         this.client = redis_1.default.createClient(defaults);
@@ -16,7 +17,7 @@ class RedisQ {
         }
         this.client.publish(queueName, message, (err, data) => {
             if (data === 0) {
-                this.client.hmset(queueName, queueName, message, (err1, res) => {
+                this.client.hmset(queueName, utility_1.generateRandomString(), message, (err1, res) => {
                     callback(err, err1, res, data);
                 });
             }
@@ -25,7 +26,7 @@ class RedisQ {
     consume(queueName, callback) {
         this.client.hgetall(queueName, (err, res) => {
             this.client.subscribe(queueName);
-            callback(queueName, res);
+            Object.values(res).forEach(val => callback(queueName, val));
             this.client.on('message', callback);
         });
     }
