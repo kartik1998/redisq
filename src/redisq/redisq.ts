@@ -14,12 +14,21 @@ export default class RedisQ {
       });
     }
 
-    this.client.publish(queueName, message, callback);
+    this.client.publish(queueName, message, (err, data) => {
+      if (data === 0) {
+        this.client.hmset(queueName, queueName, message, (err1, res) => {
+          callback(err, err1, res, data);
+        });
+      }
+    });
   }
 
   public consume(queueName: string, callback: any): void {
-    this.client.subscribe(queueName);
-    this.client.on('message', callback);
+    this.client.hgetall(queueName, (err, res) => {
+      this.client.subscribe(queueName);
+      callback(queueName, res);
+      this.client.on('message', callback);
+    });
   }
 
   public drain(): void {
