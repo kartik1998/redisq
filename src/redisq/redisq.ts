@@ -3,8 +3,10 @@ import { generateRandomString } from '../lib/utility';
 
 export default class RedisQ {
   private client: any;
+  private defaults: any;
 
   constructor(defaults: any = undefined) {
+    this.defaults = defaults;
     this.client = redis.createClient(defaults);
   }
 
@@ -18,7 +20,7 @@ export default class RedisQ {
     this.client.publish(queueName, message, (err, data) => {
       if (data === 0) {
         this.client.hmset(queueName, generateRandomString(), message, (err1, res) => {
-          callback(err, err1, res, data);
+          callback(err1, res);
         });
       }
     });
@@ -26,8 +28,15 @@ export default class RedisQ {
 
   public consume(queueName: string, callback: any): void {
     this.client.hgetall(queueName, (err, res) => {
+      if(err) throw err;
       this.client.subscribe(queueName);
-      Object.values(res).forEach(val => callback(queueName, val));
+      if (res) Object.values(res).forEach((val) => callback(queueName, val));
+      process.nextTick(() => {
+        if (res) {
+          const delClient = redis.createClient(this.defaults);
+          delClient.hdel(queueName, Object.keys(res));
+        }
+      });
       this.client.on('message', callback);
     });
   }
