@@ -18,17 +18,19 @@ export default class RedisQ {
     }
 
     this.client.publish(queueName, message, (err, data) => {
+      if (err) throw err;
       if (data === 0) {
         this.client.hmset(queueName, generateRandomString(), message, (err1, res) => {
-          callback(err1, res);
+          return callback(err1, res);
         });
       }
+      return callback(err, 'OK');
     });
   }
 
   public consume(queueName: string, callback: any): void {
     this.client.hgetall(queueName, (err, res) => {
-      if(err) throw err;
+      if (err) throw err;
       this.client.subscribe(queueName);
       if (res) Object.values(res).forEach((val) => callback(queueName, val));
       process.nextTick(() => {
