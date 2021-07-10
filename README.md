@@ -4,7 +4,7 @@
 
 ## Usage
 
-- <i>Installation</i> : `npm install https://github.com/kartik1998/redisq`
+- <i>Installation</i> : `npm i https://github.com/kartik1998/redisq.git#v0.0.0`
 
 To send a message: (send.js)
 
