@@ -1,4 +1,4 @@
-<p align = "center"> <img src = "https://raw.githubusercontent.com/kartik1998/redisq/master/assets/logo.jpg" alt="REDISQ" width=300 height=80> </p>
+<p align = "center"> <img src = "https://raw.githubusercontent.com/kartik1998/redisq/master/assets/logo.jpg" alt="REDISQ" width=400 height=150> </p>
 
 <blockquote> Redisq is a redis backed queue, message broker for node js</blockquote>
 
